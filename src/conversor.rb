@@ -11,21 +11,25 @@ class MoneyAmount
     end
 
     def *(coefficient)
-        self.amount = self.amount * coefficient
-        self
+        @newAmount = MoneyAmount.new(self.amount * coefficient, self.currency)
+        @newAmount
     end
 
     def +(another_amount)
-        another_amount_with_correct_currency = another_amount.transform_to(self.currency) #use the first operator's currency
+        #use the first operator's currency
+        another_amount_with_correct_currency = another_amount.transform_to(self.currency) 
 
-        self.amount += another_amount_with_correct_currency.amount
-        self
+        @newAmount = MoneyAmount.new(
+            self.amount + another_amount_with_correct_currency.amount,
+            self.currency )
+        @newAmount
     end
 
     def transform_to(currency)
-        self.amount = self.amount * (self.currency.value / currency.value)
-        self.currency = currency
-        self
+        @newAmount = MoneyAmount.new(
+            self.amount * (self.currency.value / currency.value),
+            currency)
+        @newAmount
     end
 
     def to_s
